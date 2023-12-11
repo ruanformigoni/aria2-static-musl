@@ -54,6 +54,6 @@ export CC="/usr/bin/gcc"
 # shellcheck disable=2155
 export CXX="/usr/bin/g++"
 
-./alpine.fim fim-root ./configure ARIA2_STATIC=yes --without-gnutls --with-openssl
+./alpine.fim fim-root ./configure ARIA2_STATIC=yes --without-gnutls --with-openssl --disable-bittorrent
 
 ./alpine.fim fim-root make -j"$(nproc)"
