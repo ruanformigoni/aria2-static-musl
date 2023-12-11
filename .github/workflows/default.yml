@@ -11,14 +11,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Compile and extract the artifact from docker container
+    - name: Compile with flatimage
       run: |
-        sudo apt install -y tar xz-utils wget jq
+        sudo apt install -y tar xz-utils wget
 
+        # Build
         mkdir -p ./dist
-
         ./build.sh
 
+        # Move to dist
         cp ./build/src/aria2 dist
 
     - name: Set permissions for dist directory

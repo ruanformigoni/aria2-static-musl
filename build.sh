@@ -12,10 +12,17 @@ set -e
 
 mkdir -p build && cd build
 
+# Fetch jq
+mkdir -p bin
+wget -q --show-progress --progress=dot:binary \
+  https://github.com/jqlang/jq/releases/download/jq-1.7/jq-linux-amd64 \
+  -O bin/jq
+chmod +x bin/jq
+
 # Link to latest version
 read -r url < <(wget -q --header="Accept: application/vnd.github+json" \
   -O - https://api.github.com/repos/aria2/aria2/releases/latest |
-  jq -e -r '.assets.[].browser_download_url | match(".*aria2-.*.tar.xz").string | select (.!=null)')
+  ./bin/jq -e -r '.assets.[].browser_download_url | match(".*aria2-.*.tar.xz").string | select (.!=null)')
 
 # Download
 wget "$url"
@@ -43,9 +50,9 @@ tar xf alpine.tar.xz
 
 # Compile
 # shellcheck disable=2155
-export CC="$(readlink -f "$(command -v gcc)")"
+export CC="/usr/bin/gcc"
 # shellcheck disable=2155
-export CXX="$(readlink -f "$(command -v g++)")"
+export CXX="/usr/bin/g++"
 
 ./alpine.fim fim-root ./configure ARIA2_STATIC=yes --without-gnutls --with-openssl
 
