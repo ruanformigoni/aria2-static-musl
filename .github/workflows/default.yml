@@ -13,14 +13,14 @@ jobs:
 
     - name: Compile with flatimage
       run: |
-        sudo apt install -y tar xz-utils wget
+        sudo apt install -y tar xz-utils wget upx-ucl
 
         # Build
-        ./build.sh
+        ( ./build.sh )
 
-        # Move to dist
+        # Compress
         mkdir -p ./dist
-        cp ./build/aria2/src/aria2c dist
+        upx --best --lzma ./build/aria2/src/aria2c -o dist/aria2c
 
     - name: Set permissions for dist directory
       run: |
